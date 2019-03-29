@@ -6,26 +6,47 @@ using namespace sf;
 
 enum ShapeEnum { CIRCLE, SQUARE };
 
-// finish this code; add functions, data as needed
-
-class SettingsMgr
-{
+// This code takes care of all of the logic relating to the menu buttons on the left
+class SettingsMgr {
 private:
-	
+	Color selectedColor;		// contains the current color the user selected
+	ShapeEnum selectedShape;	// contains the current shape the user selected
 public:
-	SettingsMgr(Color startingColor, ShapeEnum startingShape )
-	{
+	// constructor that sets up the default shape and color values for the menu
+	SettingsMgr(Color startingColor, ShapeEnum startingShape ) {
+		selectedColor = startingColor;
+		selectedShape = startingShape;
 	}
 
-	Color getCurColor()
-	{
-		return Color::Blue; // just to make it compile 
+	void setCurColor(Color c) {
+		selectedColor = c;
 	}
 
+	void setCurShape (ShapeEnum c) {
+		selectedShape = c;
+	}
 
-	ShapeEnum getCurShape()
-	{
-		return ShapeEnum::CIRCLE; // just to make it compile;
+	Color getCurColor() {
+		return selectedColor; // just to make it compile 
+	}
+
+	ShapeEnum getCurShape() {
+		return selectedShape; // just to make it compile;
+	}
+
+	// used for reading the last menu settings from the file
+	void readFile(fstream& myFile) {
+		unsigned int set;
+		myFile.read(reinterpret_cast<char*>(&set), sizeof(unsigned int));
+		myFile.read(reinterpret_cast<char*>(&selectedShape), sizeof(ShapeEnum));
+		selectedColor = Color(set);
+	}
+
+	// used for writing the last menu settings to the file 
+	void writeFile(fstream& myFile) {
+		unsigned int set = selectedColor.toInteger();
+		myFile.write(reinterpret_cast<char*>(&set), sizeof(unsigned int));
+		myFile.write(reinterpret_cast<char*>(&selectedShape), sizeof(ShapeEnum));
 	}
 
 };

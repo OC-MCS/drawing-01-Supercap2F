@@ -1,5 +1,5 @@
 //================================================
-// YOUR NAME GOES HERE <-----------------  
+// Daniel Andresen <-----------------  
 //================================================
 #include <iostream>
 #include <fstream>
@@ -29,6 +29,13 @@ int main()
 	DrawingUI   drawingUI(Vector2f(200, 50));
 	
 	// ********* Add code here to make the managers read from shapes file (if the file exists)
+	fstream myFile;
+	myFile.open("shapes.bin", ios::in | ios::binary);
+	if (myFile) {
+		settingsMgr.readFile(myFile);
+		shapeMgr.readFile(myFile);
+	}
+	myFile.close();
 
 	while (window.isOpen()) 
 	{
@@ -39,6 +46,11 @@ int main()
 			{
 				window.close();
 				// ****** Add code here to write all data to shapes file
+				fstream file;
+				file.open("shapes.bin", ios::out | ios::binary);
+				settingsMgr.writeFile(file);
+				shapeMgr.writeFile(file);
+				file.close();
 			}
 			else if (event.type == Event::MouseButtonReleased)
 			{
